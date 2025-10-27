@@ -25,6 +25,10 @@ body {
   background: #f5f5f7;
 }
 
+.stage {
+  --eraser: #f5f5f7;
+}
+
 .ui-btn {
   appearance: none;
   border: 1px solid rgba(0, 0, 0, 0.15);
@@ -50,6 +54,53 @@ body {
   border-radius: 50%;
   position: relative;
   overflow: hidden;
+}
+.circle--t {
+  position: relative;
+  overflow: hidden;
+}
+
+.t-handles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.t-rect {
+  fill: var(--eraser);
+  /* ниже — чтобы трансформации были предсказуемыми */
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+
+.circle--t {
+  position: relative;
+  overflow: hidden;
+}
+
+.t-handles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.t-rect {
+  fill: var(--eraser);
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+
+/* якорим рост по X к центру каждой таблетки */
+.t-rect--left {
+  transform-origin: 100% 50%;
+}
+
+.t-rect--right {
+  transform-origin: 0% 50%;
 }
 
 .handle {
@@ -80,11 +131,29 @@ body {
   transform-origin: 100% 50%; /* якорь справа — растёт влево при будущем scale */
 }
 
+.handle--t-left {
+  /* отступ от левого края круга, как и в «I» — оставляю твои 10dvh */
+  left: 10dvh;
+  /* вертикальное положение полосы T */
+  top: 75%;
+  /* центрируем кружок относительно точки */
+  transform: translate(-50%, -50%) scale(1);
+  /* якорим масштаб к правому краю, чтобы расти вправо/влево корректно в анимации */
+  transform-origin: 100% 50%;
+}
+
 .handle--right {
   right: 10dvh;
   top: 50%;
   transform: translate(50%, -50%) scale(1);
   transform-origin: 0% 50%; /* якорь слева — растёт вправо при будущем scale */
+}
+
+.handle--t-right {
+  right: 10dvh;
+  top: 75%;
+  transform: translate(50%, -50%) scale(1);
+  transform-origin: 0% 50%;
 }
 
 @keyframes circle-to-square {
@@ -121,18 +190,44 @@ body {
 }
 @keyframes handle-grow-left {
   from {
-    transform: translate(-50%, -50%) scale(1);
+    transform: translate(-50%, -50%) scale(1, 1);
   }
   to {
-    transform: translate(-60%, -50%) scale(6.2);
+    transform: translate(-10%, -50%) scale(6.2, 6.2);
   }
 }
 @keyframes handle-grow-right {
   from {
-    transform: translate(50%, -50%) scale(1);
+    transform: translate(50%, -50%) scale(1, 1);
   }
   to {
-    transform: translate(60%, -50%) scale(6.2);
+    transform: translate(10%, -50%) scale(6.2, 6.2);
+  }
+}
+/* рост: «круглый прямоугольник» увеличивается равномерно (векторно, без мыла) */
+@keyframes t-grow-svg {
+  from {
+    transform: scale(1, 1);
+  }
+  to {
+    transform: scale(7, 10.7);
+  }
+}
+/* скруглённые углы -> прямоугольные (в пикселях, чтобы IDE не ругался) */
+@keyframes t-round-to-rect {
+  from {
+    rx: 6px;
+  }
+  to {
+    rx: 0px;
+  }
+}
+@keyframes t-grow-x {
+  from {
+    transform: scale(1, 1);
+  }
+  to {
+    transform: scale(7, 10.7);
   }
 }
 .stage.is-playing .circle--h {
@@ -140,22 +235,31 @@ body {
 }
 .stage.is-playing .circle--h .handle--top {
   animation: handle-grow-top 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards, handle-to-square 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  animation-delay: 1.2s, 2.7s;
+  animation-delay: 0.2s, 0.2s;
 }
 .stage.is-playing .circle--h .handle--bottom {
   animation: handle-grow-bottom 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards, handle-to-square 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  animation-delay: 1.2s, 2.7s;
+  animation-delay: 0.2s, 0.2s;
 }
 .stage.is-playing .circle--i {
   animation: circle-to-square 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 .stage.is-playing .circle--i .handle--left {
   animation: handle-grow-left 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards, handle-to-square 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  animation-delay: 1.2s, 2.7s;
+  animation-delay: 0.2s, 0.2s;
 }
 .stage.is-playing .circle--i .handle--right {
   animation: handle-grow-right 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards, handle-to-square 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  animation-delay: 1.2s, 2.7s;
+  animation-delay: 0.2s, 0.2s;
+}
+.stage.is-playing .circle--t {
+  animation: circle-to-square 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.stage.is-playing .circle--t .t-rect--left,
+.stage.is-playing .circle--t .t-rect--right {
+  /* 2) растём по X → 3) убираем скругление */
+  animation: t-grow-x 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards, t-round-to-rect 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: 0.2s, 0.2s;
 }
 
 @media (max-width: 480px) {

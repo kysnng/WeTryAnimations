@@ -9,16 +9,30 @@
 <body>
 <main class="stage">
     <div class="word">
-        <!-- H (с анимацией как раньше) -->
+        <!-- H -->
         <div class="circle circle--h">
             <div class="handle handle--top"></div>
             <div class="handle handle--bottom"></div>
         </div>
 
-        <!-- I (пока только разметка: круг + «стиралки» слева/справа) -->
+        <!-- I -->
         <div class="circle circle--i">
             <div class="handle handle--left"></div>
             <div class="handle handle--right"></div>
+        </div>
+
+        <!-- T (новое) -->
+        <div class="circle circle--t">
+            <svg class="t-handles" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                <!-- ЛЕВАЯ -->
+                <g class="t-node t-node--left"  transform="translate(28.5, 75)">
+                    <rect class="t-rect t-rect--left"  x="-7" y="-7" width="9" height="9" rx="7" />
+                </g>
+                <!-- ПРАВАЯ -->
+                <g class="t-node t-node--right" transform="translate(77.5, 75)">
+                    <rect class="t-rect t-rect--right" x="-7" y="-7" width="9" height="9" rx="7" />
+                </g>
+            </svg>
         </div>
     </div>
 </main>
