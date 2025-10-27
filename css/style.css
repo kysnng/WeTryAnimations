@@ -1,0 +1,122 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: #f5f5f7;
+  color: #111;
+}
+
+.stage {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  gap: 24px;
+  padding: 24px;
+  background: #f5f5f7;
+}
+
+.ui-btn {
+  appearance: none;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: white;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.circle {
+  width: 360px;
+  height: 360px;
+  background: #000;
+  border-radius: 50%;
+  position: relative;
+  overflow: visible;
+}
+
+.handle {
+  width: 30px;
+  height: 30px;
+  background: #f5f5f7;
+  border-radius: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%) scale(1);
+  will-change: transform, border-radius;
+}
+.handle--top {
+  top: 10dvh;
+  left: 50%;
+  transform-origin: 50% 100%;
+}
+.handle--bottom {
+  bottom: 10dvh;
+  left: 50%;
+  transform-origin: 50% 0%;
+  transform: translate(-50%, 50%) scale(1);
+}
+
+@keyframes circle-to-square {
+  from {
+    border-radius: 50%;
+  }
+  to {
+    border-radius: 0;
+  }
+}
+@keyframes handle-grow-top {
+  from {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    transform: translate(-50%, -60%) scale(6.2);
+  }
+}
+@keyframes handle-grow-bottom {
+  from {
+    transform: translate(-50%, 50%) scale(1);
+  }
+  to {
+    transform: translate(-50%, 60%) scale(6.2);
+  }
+}
+@keyframes handle-to-square {
+  from {
+    border-radius: 50%;
+  }
+  to {
+    border-radius: 0;
+  }
+}
+.stage.is-playing .circle {
+  animation: circle-to-square 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.stage.is-playing .handle--top {
+  animation: handle-grow-top 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards, handle-to-square 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: 1.2s, 2.7s;
+}
+.stage.is-playing .handle--bottom {
+  animation: handle-grow-bottom 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards, handle-to-square 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: 1.2s, 2.7s;
+}
+
+@media (max-width: 480px) {
+  .circle {
+    width: 260px;
+    height: 260px;
+  }
+  .handle {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+/*# sourceMappingURL=style.css.map */
