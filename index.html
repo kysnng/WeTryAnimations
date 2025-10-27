@@ -2,27 +2,31 @@
 <html lang="ru">
 <head>
     <meta charset="utf-8" />
-    <title>Letter H — auto-start</title>
+    <title>HIT — step I (static)</title>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 <main class="stage">
-    <div class="circle">
-        <div class="handle handle--top"></div>
-        <div class="handle handle--bottom"></div>
+    <div class="word">
+        <!-- H (с анимацией как раньше) -->
+        <div class="circle circle--h">
+            <div class="handle handle--top"></div>
+            <div class="handle handle--bottom"></div>
+        </div>
+
+        <!-- I (пока только разметка: круг + «стиралки» слева/справа) -->
+        <div class="circle circle--i">
+            <div class="handle handle--left"></div>
+            <div class="handle handle--right"></div>
+        </div>
     </div>
 </main>
 
 <script>
-    // ждём, пока загрузится весь DOM
     window.addEventListener("DOMContentLoaded", () => {
         const stage = document.querySelector(".stage");
-
-        // через 2 секунды запускаем анимацию
-        setTimeout(() => {
-            stage.classList.add("is-playing");
-        }, 2000);
+        setTimeout(() => stage.classList.add("is-playing"), 2000);
     });
 </script>
 </body>

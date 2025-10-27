@@ -1,3 +1,4 @@
+@charset "UTF-8";
 *,
 *::before,
 *::after {
@@ -34,13 +35,21 @@ body {
   font-weight: 600;
 }
 
+.word {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  gap: 32px; /* расстояние между кругами */
+  align-items: center;
+}
+
 .circle {
   width: 360px;
   height: 360px;
   background: #000;
   border-radius: 50%;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .handle {
@@ -62,6 +71,20 @@ body {
   left: 50%;
   transform-origin: 50% 0%;
   transform: translate(-50%, 50%) scale(1);
+}
+
+.handle--left {
+  left: 10dvh;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  transform-origin: 100% 50%; /* якорь справа — растёт влево при будущем scale */
+}
+
+.handle--right {
+  right: 10dvh;
+  top: 50%;
+  transform: translate(50%, -50%) scale(1);
+  transform-origin: 0% 50%; /* якорь слева — растёт вправо при будущем scale */
 }
 
 @keyframes circle-to-square {
@@ -96,15 +119,42 @@ body {
     border-radius: 0;
   }
 }
-.stage.is-playing .circle {
+@keyframes handle-grow-left {
+  from {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    transform: translate(-60%, -50%) scale(6.2);
+  }
+}
+@keyframes handle-grow-right {
+  from {
+    transform: translate(50%, -50%) scale(1);
+  }
+  to {
+    transform: translate(60%, -50%) scale(6.2);
+  }
+}
+.stage.is-playing .circle--h {
   animation: circle-to-square 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
-.stage.is-playing .handle--top {
+.stage.is-playing .circle--h .handle--top {
   animation: handle-grow-top 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards, handle-to-square 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   animation-delay: 1.2s, 2.7s;
 }
-.stage.is-playing .handle--bottom {
+.stage.is-playing .circle--h .handle--bottom {
   animation: handle-grow-bottom 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards, handle-to-square 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: 1.2s, 2.7s;
+}
+.stage.is-playing .circle--i {
+  animation: circle-to-square 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.stage.is-playing .circle--i .handle--left {
+  animation: handle-grow-left 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards, handle-to-square 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: 1.2s, 2.7s;
+}
+.stage.is-playing .circle--i .handle--right {
+  animation: handle-grow-right 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards, handle-to-square 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   animation-delay: 1.2s, 2.7s;
 }
 
