@@ -9,8 +9,9 @@ $debug-handles: false;
 
 // временные параметры — всё медленнее
 $dur-circle: 0.2s;   // круг → квадрат
-$dur-grow: 1.4s;     // рост стиралок
+$dur-grow: 1.1s;     // рост стиралок
 $dur-square: 0.8s;   // стиралки → квадрат
+$dur-handle: 1.0s;
 $ease: cubic-bezier(.4, .0, 0.2, 1);
 $t-bar-top: 75%; // «первая четверть от низа» ⇒ 75% от верха
 $t-scale-x: 7;      // насколько «далеко» растягиваем в горизонт
@@ -238,13 +239,13 @@ body {
       animation:
               handle-grow-top   $dur-grow   $ease forwards,
               handle-to-square  $dur-square $ease forwards;
-      animation-delay: $dur-circle, ($dur-circle);
+      animation-delay: $dur-handle, ($dur-handle);
     }
     .handle--bottom {
       animation:
               handle-grow-bottom $dur-grow   $ease forwards,
               handle-to-square   $dur-square $ease forwards;
-      animation-delay: $dur-circle, ($dur-circle);
+      animation-delay: $dur-handle, ($dur-handle);
     }
   }
   .circle--i {
@@ -256,16 +257,14 @@ body {
       animation:
               handle-grow-left  $dur-grow   $ease forwards,
               handle-to-square  $dur-square $ease forwards;
-      animation-delay: ($dur-circle),               // после круга I
-              ($dur-circle);
+      animation-delay: $dur-handle, ($dur-handle);
     }
 
     .handle--right {
       animation:
               handle-grow-right $dur-grow   $ease forwards,
               handle-to-square  $dur-square $ease forwards;
-      animation-delay: ($dur-circle),
-              ($dur-circle);
+      animation-delay: $dur-handle, ($dur-handle);
     }
   }
   .circle--t {
@@ -277,8 +276,7 @@ body {
       animation:
               t-grow-x        $dur-grow   $ease forwards,
               t-round-to-rect $dur-square $ease forwards;
-      animation-delay: ($dur-circle),
-              ($dur-circle);
+      animation-delay: $dur-handle, ($dur-handle);
     }
   }
 }
