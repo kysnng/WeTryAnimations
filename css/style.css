@@ -46,12 +46,36 @@ body {
 .circle {
   width: 360px;
   height: 360px;
-  background: #000;
+  background: #46973f;
   border-radius: 50%;
   position: relative;
   overflow: hidden;
 }
+
+.spec-circle--x {
+  width: 360px;
+  height: 360px;
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+}
+
+.spec-rect--x {
+  x: 0;
+  y: 0;
+  fill: #9f3333;
+  mask: url(#x-cut);
+}
+
 .t-handles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.x-handles {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -69,6 +93,25 @@ body {
   transform-origin: 100% 50%;
 }
 .t-rect--right {
+  transform-origin: 0 50%;
+}
+
+.x-triangle {
+  fill: var(--eraser);
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  stroke: none;
+}
+.x-triangle--top {
+  transform-origin: 50% 0;
+}
+.x-triangle--right {
+  transform-origin: 100% 50%;
+}
+.x-triangle--bottom {
+  transform-origin: 50% 100%;
+}
+.x-triangle--left {
   transform-origin: 0 50%;
 }
 
@@ -127,6 +170,14 @@ body {
   }
   to {
     border-radius: 0;
+  }
+}
+@keyframes circle-to-square--x {
+  from {
+    rx: 50px;
+  }
+  to {
+    rx: 0;
   }
 }
 @keyframes handle-grow-top {
@@ -200,22 +251,22 @@ body {
 }
 .stage.is-playing .circle--h .handle--top {
   animation: handle-grow-top 1.1s cubic-bezier(0.4, 0, 0.2, 1) forwards, handle-to-square 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  animation-delay: 1s, 1s;
+  animation-delay: 0.8s, 0.8s;
 }
 .stage.is-playing .circle--h .handle--bottom {
   animation: handle-grow-bottom 1.1s cubic-bezier(0.4, 0, 0.2, 1) forwards, handle-to-square 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  animation-delay: 1s, 1s;
+  animation-delay: 0.8s, 0.8s;
 }
 .stage.is-playing .circle--i {
   animation: circle-to-square 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 .stage.is-playing .circle--i .handle--left {
   animation: handle-grow-left 1.1s cubic-bezier(0.4, 0, 0.2, 1) forwards, handle-to-square 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  animation-delay: 1s, 1s;
+  animation-delay: 0.8s, 0.8s;
 }
 .stage.is-playing .circle--i .handle--right {
   animation: handle-grow-right 1.1s cubic-bezier(0.4, 0, 0.2, 1) forwards, handle-to-square 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  animation-delay: 1s, 1s;
+  animation-delay: 0.8s, 0.8s;
 }
 .stage.is-playing .circle--t {
   animation: circle-to-square 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
@@ -223,7 +274,10 @@ body {
 .stage.is-playing .circle--t .t-rect--left,
 .stage.is-playing .circle--t .t-rect--right {
   animation: t-grow-x 1.1s cubic-bezier(0.4, 0, 0.2, 1) forwards, t-round-to-rect 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  animation-delay: 1s, 1s;
+  animation-delay: 0.8s, 0.8s;
+}
+.stage.is-playing .rect-mask--x {
+  animation: circle-to-square--x 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 @media (max-width: 480px) {
