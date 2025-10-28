@@ -1,4 +1,8 @@
 @charset "UTF-8";
+/* Данный SCSS файл предназначен для визуализации и анимации перехода кругов
+*  в различимые буквы H, I, T. Изначально разработан для Лабораторной №2 дисциплины Web-программирование,
+*  изучаемая в "НИУ ИТМО" г. Санкт-Петербург, 2025
+*/
 *,
 *::before,
 *::after {
@@ -9,6 +13,8 @@ html, body {
   height: 100%;
 }
 
+/* Важно! Цвет любых стиралок и background должен быть
+*  одинаковым, иначе не будет достигнут эффект "букв" */
 body {
   margin: 0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -29,16 +35,6 @@ body {
   --eraser: #f5f5f7;
 }
 
-.ui-btn {
-  appearance: none;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  background: white;
-  padding: 0.6rem 1rem;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
 .word {
   display: grid;
   grid-auto-flow: column;
@@ -55,11 +51,6 @@ body {
   position: relative;
   overflow: hidden;
 }
-.circle--t {
-  position: relative;
-  overflow: hidden;
-}
-
 .t-handles {
   position: absolute;
   inset: 0;
@@ -74,31 +65,9 @@ body {
   transform-box: fill-box;
   transform-origin: 50% 50%;
 }
-
-.circle--t {
-  position: relative;
-  overflow: hidden;
-}
-
-.t-handles {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-.t-rect {
-  fill: var(--eraser);
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
-}
-
-/* якорим рост по X к центру каждой таблетки */
 .t-rect--left {
   transform-origin: 100% 50%;
 }
-
 .t-rect--right {
   transform-origin: 0% 50%;
 }
@@ -123,14 +92,18 @@ body {
   transform-origin: 50% 0%;
   transform: translate(-50%, 50%) scale(1);
 }
-
 .handle--left {
   left: 10dvh;
   top: 50%;
   transform: translate(-50%, -50%) scale(1);
   transform-origin: 100% 50%; /* якорь справа — растёт влево при будущем scale */
 }
-
+.handle--right {
+  right: 10dvh;
+  top: 50%;
+  transform: translate(50%, -50%) scale(1);
+  transform-origin: 0% 50%; /* якорь слева — растёт вправо при будущем scale */
+}
 .handle--t-left {
   /* отступ от левого края круга, как и в «I» — оставляю твои 10dvh */
   left: 10dvh;
@@ -141,14 +114,6 @@ body {
   /* якорим масштаб к правому краю, чтобы расти вправо/влево корректно в анимации */
   transform-origin: 100% 50%;
 }
-
-.handle--right {
-  right: 10dvh;
-  top: 50%;
-  transform: translate(50%, -50%) scale(1);
-  transform-origin: 0% 50%; /* якорь слева — растёт вправо при будущем scale */
-}
-
 .handle--t-right {
   right: 10dvh;
   top: 75%;
@@ -204,7 +169,7 @@ body {
     transform: translate(10%, -50%) scale(6.2, 6.2);
   }
 }
-/* рост: «круглый прямоугольник» увеличивается равномерно (векторно, без мыла) */
+/* рост: «круглый прямоугольник» увеличивается равномерно (векторно, без мыла, костыль для T) */
 @keyframes t-grow-svg {
   from {
     transform: scale(1, 1);
@@ -257,7 +222,6 @@ body {
 }
 .stage.is-playing .circle--t .t-rect--left,
 .stage.is-playing .circle--t .t-rect--right {
-  /* 2) растём по X → 3) убираем скругление */
   animation: t-grow-x 1.1s cubic-bezier(0.4, 0, 0.2, 1) forwards, t-round-to-rect 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   animation-delay: 1s, 1s;
 }

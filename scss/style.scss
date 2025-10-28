@@ -1,39 +1,39 @@
-// ===== variables =====
+
+/* Данный SCSS файл предназначен для визуализации и анимации перехода кругов
+*  в различимые буквы H, I, T. Изначально разработан для Лабораторной №2 дисциплины Web-программирование,
+*  изучаемая в "НИУ ИТМО" г. Санкт-Петербург, 2025
+*/
+
+// ===== Переменные визуализации =====
 $stage-bg: #f5f5f7;
 $circle-color: #000;
 $circle-size: 360px;
 $handle-size: 30px;
 $eraser-color: $stage-bg;
 
+// Переменная при переключении на TRUE создает границы стиралок
 $debug-handles: false;
 
-// временные параметры — всё медленнее
-$dur-circle: 0.2s;   // круг → квадрат
-$dur-grow: 1.1s;     // рост стиралок
-$dur-square: 0.8s;   // стиралки → квадрат
-$dur-handle: 1.0s;
-$ease: cubic-bezier(.4, .0, 0.2, 1);
-$t-bar-top: 75%; // «первая четверть от низа» ⇒ 75% от верха
-$t-scale-x: 7;      // насколько «далеко» растягиваем в горизонт
-$t-scale-y: 10.7;    // итоговая толщина перекладины (по высоте)
-$t-y: 75; // проценты от верха: 75 ~ «первая четверть снизу»
+// ===== Переменные анимации =====
+$dur-circle: 0.2s;   // длительность перехода из круга в квадрат (для черных кругов)
+$dur-grow: 1.1s;     // длительность роста стиралок
+$dur-square: 0.8s;   // длительность преобразования стиралок в квадрат
+$dur-handle: 1.0s;   // длительность задержки анимации стиралок
+$ease: cubic-bezier(.4, .0, 0.2, 1); // Кривая Бейзера для кастомной плавности анимации
+$t-bar-top: 75%; // переменная расположения hadnlerов для буквы T
+$t-scale-x: 7;      // растяжение стиралок по оси X (создание основы буквы T)
+$t-scale-y: 10.7;    // растяжение стиралок по оси Y (создание основы буквы T)
+$t-corner-start: 6px; // начальное скругление стиралок буквы T
 
-$t-bar-y: 75;        // уровень перекладины T (0..100 сверху вниз)
-$t-thickness: 14;    // высота прямоугольника (viewBox units)
-$t-base-width: 10;   // стартовая ширина
-$t-grow-x: 3.6;      // во сколько раз растянем по X (не по Y!)
-$t-corner-start: 6px; // начальное скругление (визуально как «таблетка»)
-
-
-$gap: .01s; // пауза между фазами/буквами
-
-// ===== base =====
+// ===== Внешняя сцена =====
 *,
 *::before,
 *::after { box-sizing: border-box; }
 
 html, body { height: 100%; }
 
+/* Важно! Цвет любых стиралок и background должен быть
+*  одинаковым, иначе не будет достигнут эффект "букв" */
 body {
   margin: 0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -41,7 +41,7 @@ body {
   color: #111;
 }
 
-// ===== layout =====
+// ===== Внутренняя сцена - основной блок контента =====
 .stage {
   min-height: 100dvh;
   display: grid;
@@ -51,18 +51,7 @@ body {
   background: $stage-bg;
 }
 
-.stage { --eraser: #{$stage-bg}; }
-
-
-.ui-btn {
-  appearance: none;
-  border: 1px solid rgba(0,0,0,.15);
-  background: white;
-  padding: .6rem 1rem;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-}
+.stage { --eraser: #{$stage-bg}; } // Цвет стиралок для буквы T
 
 .word {
   display: grid;
@@ -72,23 +61,16 @@ body {
   align-items: center;
 }
 
-
-
-// ===== circle =====
+// ===== Круги из которых образуются буквы =====
 .circle {
   width: $circle-size;
   height: $circle-size;
   background: $circle-color;
   border-radius: 50%;
   position: relative;
-  overflow: hidden; // ← было visible
+  overflow: hidden;
 
   &--t{}
-}
-
-.circle--t {
-  position: relative;
-  overflow: hidden; // важно, чтобы ничего не вылезало в соседние буквы
 }
 
 .t-handles {
@@ -104,28 +86,17 @@ body {
   /* ниже — чтобы трансформации были предсказуемыми */
   transform-box: fill-box;
   transform-origin: 50% 50%;
+
+  &--left{
+    transform-origin: 100% 50%;
+  }
+
+  &--right{
+    transform-origin:   0% 50%;
+  }
 }
 
-.circle--t { position: relative; overflow: hidden; }
-
-.t-handles {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%; display: block;
-}
-
-.t-rect {
-  fill: var(--eraser);                 // «ластик»
-  transform-box: fill-box;
-  transform-origin: 50% 50%;
-}
-
-/* якорим рост по X к центру каждой таблетки */
-.t-rect--left  { transform-origin: 100% 50%; } // растёт вправо (от центра к внешнему краю)
-.t-rect--right { transform-origin:   0% 50%; } // растёт влево
-
-
-
-// ===== handles =====
+// ===== Стиралки =====
 .handle {
   width: $handle-size;
   height: $handle-size;
@@ -145,36 +116,39 @@ body {
     transform-origin: 50% 0%;
     transform: translate(-50%, 50%) scale(1);
   }
+
+  &--left{
+    left: 10dvh; top: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    transform-origin: 100% 50%; /* якорь справа — растёт влево при будущем scale */
+  }
+
+  &--right{
+    right: 10dvh; top: 50%;
+    transform: translate(50%, -50%) scale(1);
+    transform-origin: 0% 50%; /* якорь слева — растёт вправо при будущем scale */
+  }
+
+  &--t-left{
+    /* отступ от левого края круга, как и в «I» — оставляю твои 10dvh */
+    left: 10dvh;
+    /* вертикальное положение полосы T */
+    top: $t-bar-top;
+    /* центрируем кружок относительно точки */
+    transform: translate(-50%, -50%) scale(1);
+    /* якорим масштаб к правому краю, чтобы расти вправо/влево корректно в анимации */
+    transform-origin: 100% 50%;
+  }
+
+  &--t-right{
+    right: 10dvh;
+    top: $t-bar-top;
+    transform: translate(50%, -50%) scale(1);
+    transform-origin: 0% 50%;
+  }
 }
 
-.handle--left {
-  left: 10dvh; top: 50%;
-  transform: translate(-50%, -50%) scale(1);
-  transform-origin: 100% 50%; /* якорь справа — растёт влево при будущем scale */
-}
-.handle--t-left {
-  /* отступ от левого края круга, как и в «I» — оставляю твои 10dvh */
-  left: 10dvh;
-  /* вертикальное положение полосы T */
-  top: $t-bar-top;
-  /* центрируем кружок относительно точки */
-  transform: translate(-50%, -50%) scale(1);
-  /* якорим масштаб к правому краю, чтобы расти вправо/влево корректно в анимации */
-  transform-origin: 100% 50%;
-}
-.handle--right {
-  right: 10dvh; top: 50%;
-  transform: translate(50%, -50%) scale(1);
-  transform-origin: 0% 50%; /* якорь слева — растёт вправо при будущем scale */
-}
-.handle--t-right {
-  right: 10dvh;
-  top: $t-bar-top;
-  transform: translate(50%, -50%) scale(1);
-  transform-origin: 0% 50%;
-}
-
-// ===== keyframes =====
+// ===== Ключи анимаций =====
 @keyframes circle-to-square {
   from { border-radius: 50%; }
   to   { border-radius: 0; }
@@ -204,7 +178,7 @@ body {
   to   { transform: translate(10%, -50%) scale(6.2, 6.2); }  // смещение вправо + масштаб
 }
 
-/* рост: «круглый прямоугольник» увеличивается равномерно (векторно, без мыла) */
+/* рост: «круглый прямоугольник» увеличивается равномерно (векторно, без мыла, костыль для T) */
 @keyframes t-grow-svg {
   from { transform: scale(1, 1); }
   to   { transform: scale(#{$t-scale-x}, #{$t-scale-y}); }
@@ -216,19 +190,10 @@ body {
   to   { rx: 0px; }
 }
 
-//@keyframes t-grow-x {
-//  from { transform: scaleX(1); }
-//  to   { transform: scaleX(#{$t-grow-x}); }
-//}
-
 @keyframes t-grow-x {
   from { transform: scale(1, 1); }
   to   { transform: scale(#{$t-scale-x}, #{$t-scale-y}); }
 }
-
-
-
-
 
 // ===== Анимашечка =====
 .stage.is-playing {
@@ -249,10 +214,8 @@ body {
     }
   }
   .circle--i {
-    // 1) круг I → квадрат
     animation: circle-to-square ($dur-circle+1s) $ease forwards;
 
-    // 2) стиралки I: рост → 3) квадрат
     .handle--left {
       animation:
               handle-grow-left  $dur-grow   $ease forwards,
@@ -272,7 +235,6 @@ body {
 
     .t-rect--left,
     .t-rect--right {
-      /* 2) растём по X → 3) убираем скругление */
       animation:
               t-grow-x        $dur-grow   $ease forwards,
               t-round-to-rect $dur-square $ease forwards;
@@ -281,8 +243,7 @@ body {
   }
 }
 
-
-// ===== адаптив для проституток =====
+// ===== адаптив для малых экранов =====
 @media (max-width: 480px) {
   $circle-size: 260px !global;
   $handle-size: 22px !global;
