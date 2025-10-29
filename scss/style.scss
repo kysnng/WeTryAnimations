@@ -19,6 +19,7 @@ $dur-square: 0.8s;   // длительность преобразования с
 $dur-handle: 0.8s;   // длительность задержки анимации стиралок
 $gap: 0.0s; // задержка между расширением и переходом в квадрат. Менять как хочеца
 $ease: cubic-bezier(.4, .0, 0.2, 1); // Кривая Бейзера для кастомной плавности анимации
+$ease-miss: cubic-bezier(.4, 0.1, 0.4, 1);
 $t-bar-top: 75%; // переменная расположения hadnlerов для буквы T
 $t-scale-x: 7;      // растяжение стиралок по оси X (создание основы буквы T)
 $t-scale-y: 10.7;    // растяжение стиралок по оси Y (создание основы буквы T)
@@ -78,6 +79,7 @@ body {
   position: relative;
   overflow: hidden;
   background: transparent;
+  transform-origin: 0 0;
 }
 
 .spec-rect--x{
@@ -85,6 +87,17 @@ body {
   y: 0;
   fill: $miss-color;
   mask: url(#x-cut);
+}
+
+.miss-text{
+  font-family: Arial Black, serif;
+  text-align: center;
+  font-size: 39pt;
+  color: $miss-color;
+  grid-column: 1/ 2;
+  grid-row: 2 /3;
+  transform-orgin: 0, -30%;
+  opacity: 0;
 }
 
 .t-handles {
@@ -121,21 +134,33 @@ body {
 .x-triangle{
   fill: var(--eraser);
   transform-box: fill-box;
-  transform-origin: 50% 50%;
   stroke: none;
 
   &--top{
-    transform-origin: 50% 0;
+    fill: white;
+    transform-origin: 50% -300%;
+    opacity: 0;
   }
+
   &--right{
-    transform-origin: 100% 50%;
+    transform-origin: -300%, 50%;
+    opacity: 0;
+    fill: white;
   }
+
   &--bottom{
-    transform-origin: 50% 100%;
+    transform-origin: 50% 300%;
+    opacity: 0;
+    fill: white;
   }
+
   &--left{
-    transform-origin: 0 50%;
+    transform-origin: 300% 50%;
+    opacity: 0;
+    fill: white;
   }
+
+
 }
 
 // ===== Стиралки =====
@@ -242,6 +267,70 @@ body {
   to   { transform: scale(#{$t-scale-x}, #{$t-scale-y}); }
 }
 
+@keyframes x-move {
+  from { transform: translateY(0%); }
+  to   { transform: translateY(-30%); }
+}
+@keyframes miss-move {
+  from {
+    transform: translateY(-200%);
+         opacity: 0;
+  }
+  to   {
+    transform: translateY(-130%);
+         opacity: 1;
+  }
+}
+
+@keyframes move-tr-t {
+  from {
+    transform: translate(50%, -300%);
+    fill: white;
+    opacity: 0;
+  }
+  to   {
+    transform: translate(50%, 0%);
+    fill: black;
+    opacity: 1;
+  }
+}
+@keyframes move-tr-r {
+  from {
+    transform: translate(-300%, 50%);
+    fill: white;
+    opacity: 0;
+  }
+  to   {
+    transform: translate(0%, 50%);
+    fill: black;
+    opacity: 1;
+  }
+}
+@keyframes move-tr-b {
+  from {
+    transform: translate(50%, 300%);
+    fill: white;
+    opacity: 0;
+  }
+  to   {
+    transform: translate(50%, 100%);
+    fill: black;
+    opacity: 1;
+  }
+}
+@keyframes move-tr-l {
+  from {
+    transform: translate(300%, 50%);
+    fill: white;
+    opacity: 0;
+  }
+  to   {
+    transform: translate(100%, 50%);
+    fill: black;
+    opacity: 1;
+  }
+}
+
 // ===== Анимашечка =====
 .stage.is-playing {
   .circle--h {
@@ -290,6 +379,31 @@ body {
   }
   .rect-mask--x{
     animation: circle-to-square--x ($dur-circle+1s) $ease forwards;
+    animation-delay: 1.3s;
+  }
+
+  .x-triangle--top{
+    animation: move-tr-t ($dur-circle+1s) $ease forwards;
+
+  }
+  .x-triangle--bottom{
+    animation: move-tr-b ($dur-circle+1s) $ease forwards;
+  }
+  .x-triangle--right{
+    animation: move-tr-r ($dur-circle+1s) $ease forwards;
+  }
+  .x-triangle--left{
+    animation: move-tr-l ($dur-circle+1s) $ease forwards;
+  }
+}
+
+.stage.is-moving{
+  .spec-circle--x{
+    animation: x-move ($dur-circle+1s) $ease forwards;
+  }
+  .miss-text{
+    animation: miss-move ($dur-circle+1s) $ease-miss forwards;
+    animation-delay: 0s;
   }
 }
 

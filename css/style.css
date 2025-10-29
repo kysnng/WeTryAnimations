@@ -58,6 +58,7 @@ body {
   position: relative;
   overflow: hidden;
   background: transparent;
+  transform-origin: 0 0;
 }
 
 .spec-rect--x {
@@ -65,6 +66,17 @@ body {
   y: 0;
   fill: #9f3333;
   mask: url(#x-cut);
+}
+
+.miss-text {
+  font-family: Arial Black, serif;
+  text-align: center;
+  font-size: 39pt;
+  color: #9f3333;
+  grid-column: 1/2;
+  grid-row: 2/3;
+  transform-orgin: 0, -30%;
+  opacity: 0;
 }
 
 .t-handles {
@@ -99,20 +111,27 @@ body {
 .x-triangle {
   fill: var(--eraser);
   transform-box: fill-box;
-  transform-origin: 50% 50%;
   stroke: none;
 }
 .x-triangle--top {
-  transform-origin: 50% 0;
+  fill: white;
+  transform-origin: 50% -300%;
+  opacity: 0;
 }
 .x-triangle--right {
-  transform-origin: 100% 50%;
+  transform-origin: -300% 50%;
+  opacity: 0;
+  fill: white;
 }
 .x-triangle--bottom {
-  transform-origin: 50% 100%;
+  transform-origin: 50% 300%;
+  opacity: 0;
+  fill: white;
 }
 .x-triangle--left {
-  transform-origin: 0 50%;
+  transform-origin: 300% 50%;
+  opacity: 0;
+  fill: white;
 }
 
 .handle {
@@ -246,6 +265,72 @@ body {
     transform: scale(7, 10.7);
   }
 }
+@keyframes x-move {
+  from {
+    transform: translateY(0%);
+  }
+  to {
+    transform: translateY(-30%);
+  }
+}
+@keyframes miss-move {
+  from {
+    transform: translateY(-200%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(-130%);
+    opacity: 1;
+  }
+}
+@keyframes move-tr-t {
+  from {
+    transform: translate(50%, -300%);
+    fill: white;
+    opacity: 0;
+  }
+  to {
+    transform: translate(50%, 0%);
+    fill: black;
+    opacity: 1;
+  }
+}
+@keyframes move-tr-r {
+  from {
+    transform: translate(-300%, 50%);
+    fill: white;
+    opacity: 0;
+  }
+  to {
+    transform: translate(0%, 50%);
+    fill: black;
+    opacity: 1;
+  }
+}
+@keyframes move-tr-b {
+  from {
+    transform: translate(50%, 300%);
+    fill: white;
+    opacity: 0;
+  }
+  to {
+    transform: translate(50%, 100%);
+    fill: black;
+    opacity: 1;
+  }
+}
+@keyframes move-tr-l {
+  from {
+    transform: translate(300%, 50%);
+    fill: white;
+    opacity: 0;
+  }
+  to {
+    transform: translate(100%, 50%);
+    fill: black;
+    opacity: 1;
+  }
+}
 .stage.is-playing .circle--h {
   animation: circle-to-square 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
@@ -278,6 +363,27 @@ body {
 }
 .stage.is-playing .rect-mask--x {
   animation: circle-to-square--x 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: 1.3s;
+}
+.stage.is-playing .x-triangle--top {
+  animation: move-tr-t 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.stage.is-playing .x-triangle--bottom {
+  animation: move-tr-b 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.stage.is-playing .x-triangle--right {
+  animation: move-tr-r 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.stage.is-playing .x-triangle--left {
+  animation: move-tr-l 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.stage.is-moving .spec-circle--x {
+  animation: x-move 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.stage.is-moving .miss-text {
+  animation: miss-move 1.2s cubic-bezier(0.4, 0.1, 0.4, 1) forwards;
+  animation-delay: 0s;
 }
 
 @media (max-width: 480px) {

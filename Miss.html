@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8"/>
+    <title>Miss animation</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+<main class="stage">
+    <div class="word">
+        <div class="spec-circle--x">
+            <svg class="x-handles" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+                <defs>
+                    <!-- Маска: белым оставляем, чёрным вырезаем -->
+                    <mask id="x-cut" maskUnits="userSpaceOnUse">
+                        <!-- фон маски чёрный = всё скрыто -->
+                        <rect x="0" y="0" width="100" height="100" fill="black"/>
+                        <!-- круг белый = показываем круг -->
+                        <rect class="rect-mask--x" x="0" y="0" width="100" height="100" rx="50" fill="white"/>
+                        <!-- Треугольники ЧЁРНЫЕ = вырезают дыры в круге -->
+                        <g fill="black">
+                            <g class="x-triangle--top" transform="translate(50, 0)">
+                                <polygon points="-18,0 0,36 18,0"/>
+                            </g>
+                            <g class="x-triangle--right" transform="translate(0, 50)">
+                                <polygon points="0,-18 0,18 36,0"/>
+                            </g>
+                            <g class="x-triangle--bottom" transform="translate(50, 100)">
+                                <polygon points="-18,0 18,0 0,-36"/>
+                            </g>
+                            <g class="x-triangle--left" transform="translate(100, 50)">
+                                <polygon points="0,-18 0,18 -36,0"/>
+                            </g>
+                        </g>
+                    </mask>
+                </defs>
+
+                <!-- ОДИН слой: чёрный прямоугольник, на который навешана маска -->
+                <rect width="100" height="100" class="spec-rect--x"/>
+            </svg>
+        </div>
+        <div class="miss-text">MISS</div>
+    </div>
+</main>
+<script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const stage = document.querySelector(".stage");
+        setTimeout(() => stage.classList.add("is-playing"), 300);
+    });
+
+    window.addEventListener("DOMContentLoaded", () => {
+        const stage = document.querySelector(".stage");
+        stage.classList.remove("is-playing");
+        setTimeout(() => stage.classList.add("is-moving"), 2500);
+
+    })
+</script>
+</body>
+</html>
